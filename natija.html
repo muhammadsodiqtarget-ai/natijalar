@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Target 1.0 — Natijalar</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --or:#e8630a;--or2:#f5890d;--or3:#ffa940;
+  --dark:#1a0a00;--mu:#7a5a3a;--brd:#f0ede8;
+  --gr:#16a34a;--red:#dc2626;
+}
+html{scroll-behavior:smooth}
+body{background:#fafaf8;color:var(--dark);font-family:'DM Sans',sans-serif;overflow-x:hidden;min-height:100vh}
+
+/* PARTICLES */
+.pts{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.p{position:absolute;border-radius:50%;animation:floatUp linear infinite;opacity:0}
+@keyframes floatUp{0%{transform:translateY(105vh) rotate(0);opacity:0}10%{opacity:.35}90%{opacity:.1}100%{transform:translateY(-5vh) rotate(540deg);opacity:0}}
+
+/* HEADER */
+.hdr{background:#fff;border-bottom:2px solid var(--brd);padding:13px 16px;position:sticky;top:0;z-index:200}
+.hdr-i{max-width:480px;margin:0 auto;display:flex;align-items:center;gap:10px}
+.logo-box{width:32px;height:32px;background:linear-gradient(135deg,var(--or),var(--or3));border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;animation:glow 3s ease infinite}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(232,99,10,.3)}50%{box-shadow:0 0 0 7px rgba(232,99,10,0)}}
+.logo-txt{font-family:'Syne',sans-serif;font-weight:800;font-size:12px;color:#fff}
+.brand{font-family:'Syne',sans-serif;font-weight:700;font-size:14px}
+.hdr-pill{margin-left:auto;background:linear-gradient(135deg,var(--or),var(--or2));color:#fff;border-radius:100px;padding:4px 12px;font-size:10px;font-weight:700;white-space:nowrap}
+
+.wrap{max-width:480px;margin:0 auto;padding:0 16px;position:relative;z-index:1}
+
+/* ══════════════════════════════
+   SCREEN 1 — SEARCH
+══════════════════════════════ */
+#screen1{padding:32px 0 40px;animation:fadeUp .5s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+.hero-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(232,99,10,.08);border:1px solid rgba(232,99,10,.2);border-radius:100px;padding:5px 14px;font-size:10px;font-weight:700;color:var(--or);letter-spacing:1px;text-transform:uppercase;margin-bottom:16px}
+.hero-dot{width:5px;height:5px;border-radius:50%;background:var(--or);animation:blink 1.5s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(24px,7vw,36px);line-height:1.1;letter-spacing:-1px;margin-bottom:10px}
+h1 .acc{color:var(--or)}
+.hero-desc{font-size:13px;color:var(--mu);line-height:1.75;margin-bottom:28px}
+
+/* SEARCH CARD */
+.srch-card{background:#fff;border:2px solid var(--brd);border-radius:18px;padding:22px;box-shadow:0 4px 20px rgba(0,0,0,.06);margin-bottom:20px}
+.srch-card-title{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;margin-bottom:4px}
+.srch-card-sub{font-size:12px;color:var(--mu);margin-bottom:16px;line-height:1.6}
+.s-in{width:100%;background:#fafaf8;border:2px solid var(--brd);border-radius:12px;padding:13px 15px;font-size:15px;color:var(--dark);font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;margin-bottom:10px}
+.s-in:focus{border-color:var(--or)}
+.s-in::placeholder{color:#b0a090;font-size:14px}
+.s-btn{width:100%;background:linear-gradient(135deg,var(--or),var(--or2));color:#fff;border:none;border-radius:12px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;letter-spacing:.3px}
+.s-btn:active{transform:scale(.98)}
+.s-btn:hover{box-shadow:0 6px 20px rgba(232,99,10,.35)}
+
+/* SEARCHING STATE */
+.searching{display:none;text-align:center;padding:24px 0}
+.searching.show{display:block}
+.search-dots{display:flex;justify-content:center;gap:6px;margin-bottom:12px}
+.sd{width:8px;height:8px;border-radius:50%;background:var(--or);animation:sdBounce .8s ease infinite}
+.sd:nth-child(2){animation-delay:.15s}
+.sd:nth-child(3){animation-delay:.3s}
+@keyframes sdBounce{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-8px);opacity:1}}
+.search-txt{font-size:13px;color:var(--mu);animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* SHARE PROMPT */
+#sharePrompt{display:none;background:#fff;border:2px solid var(--brd);border-radius:18px;padding:22px;box-shadow:0 4px 20px rgba(0,0,0,.06);margin-bottom:20px;animation:popIn .4s cubic-bezier(.16,1,.3,1)}
+#sharePrompt.show{display:block}
+@keyframes popIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+.sp-ico{font-size:36px;text-align:center;margin-bottom:12px}
+.sp-title{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;text-align:center;margin-bottom:8px}
+.sp-desc{font-size:13px;color:var(--mu);text-align:center;line-height:1.7;margin-bottom:18px}
+.sp-name{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:var(--or);text-align:center;margin-bottom:16px;background:rgba(232,99,10,.06);border-radius:10px;padding:10px}
+.sp-btn{width:100%;background:linear-gradient(135deg,var(--or),var(--or2));color:#fff;border:none;border-radius:12px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:8px;transition:all .2s}
+.sp-btn:active{transform:scale(.98)}
+.sp-skip{width:100%;background:transparent;color:var(--mu);border:1.5px solid var(--brd);border-radius:12px;padding:12px;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.sp-skip:hover{border-color:var(--or);color:var(--or)}
+
+/* ══════════════════════════════
+   SCREEN 2 — RESULT: QABUL
+══════════════════════════════ */
+#screen2{display:none;padding:24px 0 40px}
+#screen2.show{display:block;animation:popIn .5s cubic-bezier(.16,1,.3,1)}
+
+/* CONFETTI CANVAS */
+#confCanvas{position:fixed;inset:0;pointer-events:none;z-index:999}
+
+.result-card-win{background:linear-gradient(145deg,#14532d,#16a34a,#22c55e);border-radius:20px;padding:28px 20px;text-align:center;position:relative;overflow:hidden;box-shadow:0 14px 40px rgba(22,163,74,.4);margin-bottom:16px}
+.result-card-win::before{content:'';position:absolute;top:-50px;right:-50px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.08)}
+.win-conf{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.wc{position:absolute;top:-6px;animation:confDrop linear infinite}
+@keyframes confDrop{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(110%) rotate(360deg);opacity:0}}
+.win-trophy{font-size:52px;display:block;margin-bottom:12px;animation:tBounce 2s ease infinite;position:relative;z-index:1}
+@keyframes tBounce{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-12px) rotate(6deg)}}
+.win-lbl{font-size:10px;font-weight:700;color:rgba(255,255,255,.7);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;position:relative;z-index:1}
+.win-name{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(20px,6vw,30px);color:#fff;margin-bottom:8px;position:relative;z-index:1;line-height:1.2}
+.win-msg{font-size:13px;color:rgba(255,255,255,.9);line-height:1.7;position:relative;z-index:1;margin-bottom:14px}
+.win-msg strong{color:#fff}
+.win-pill{display:inline-block;background:rgba(255,255,255,.2);border-radius:100px;padding:4px 14px;font-size:11px;font-weight:700;color:#fff;position:relative;z-index:1}
+
+.win-share{background:#fff;border:2px solid #bbf7d0;border-radius:16px;padding:18px;margin-bottom:14px}
+.ws-title{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;margin-bottom:6px;color:var(--gr)}
+.ws-desc{font-size:12px;color:var(--mu);line-height:1.6;margin-bottom:14px}
+.ws-btn{width:100%;background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff;border:none;border-radius:12px;padding:13px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;margin-bottom:8px}
+.ws-btn:active{transform:scale(.98)}
+.ws-copy{width:100%;background:transparent;color:var(--gr);border:1.5px solid #bbf7d0;border-radius:12px;padding:11px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.ws-copy:hover{background:#f0fdf4}
+
+/* ROADMAP (win) */
+.rm-wrap{margin-bottom:14px}
+.rm-sec-lbl{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.rm-bar{width:18px;height:3px;background:var(--or);border-radius:2px}
+.rm-sec-title{font-family:'Syne',sans-serif;font-weight:800;font-size:12px;letter-spacing:.5px;text-transform:uppercase;color:var(--or)}
+
+.timeline{position:relative;padding-left:44px}
+.timeline::before{content:'';position:absolute;left:14px;top:16px;bottom:16px;width:2px;
+  background:linear-gradient(180deg,var(--or) 0%,rgba(232,99,10,.4) 30%,rgba(167,139,250,.5) 65%,rgba(219,169,60,.6) 85%,rgba(219,169,60,.2) 100%);
+  border-radius:2px}
+
+.rm-item{position:relative;margin-bottom:8px}
+.rm-dot{position:absolute;left:-38px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:11px;z-index:2;border:1.5px solid;flex-shrink:0}
+.dot-done{background:#22c97a;border-color:#22c97a;color:#fff}
+.dot-now{background:var(--or);border-color:var(--or);color:#fff;animation:dotP 2s ease infinite}
+@keyframes dotP{0%,100%{box-shadow:0 0 0 0 rgba(232,99,10,.4)}70%{box-shadow:0 0 0 7px rgba(232,99,10,0)}}
+.dot-next{background:#fff;border-color:#e0ddd8;color:#9a9890}
+.dot-go{background:rgba(219,169,60,.12);border-color:rgba(219,169,60,.3);color:#dba93c}
+.dot-pu{background:rgba(167,139,250,.12);border-color:rgba(167,139,250,.3);color:#a78bfa}
+
+.rm-card{background:#fff;border:1.5px solid var(--brd);border-radius:12px;padding:12px 14px}
+.c-done{border-color:rgba(34,201,122,.25);background:rgba(34,201,122,.04)}
+.c-now{border-color:rgba(232,99,10,.3);background:linear-gradient(135deg,rgba(232,99,10,.05),#fff)}
+.c-go{border-color:rgba(219,169,60,.2);background:rgba(219,169,60,.03)}
+.c-pu{border-color:rgba(167,139,250,.2)}
+.rm-date{font-family:'Syne',sans-serif;font-weight:800;font-size:10px;letter-spacing:.5px;margin-bottom:2px}
+.c-done .rm-date{color:#22c97a}.c-now .rm-date{color:var(--or)}.c-go .rm-date{color:#dba93c}.c-pu .rm-date{color:#a78bfa}
+.rm-label{font-size:13px;font-weight:600;margin-bottom:3px}
+.rm-desc{font-size:11px;color:var(--mu);line-height:1.5}
+.rm-badge{display:inline-block;font-size:9px;font-weight:700;border-radius:100px;padding:2px 9px;margin-top:6px;letter-spacing:.5px}
+.b-done{background:rgba(34,201,122,.1);color:#22c97a;border:1px solid rgba(34,201,122,.25)}
+.b-now{background:rgba(232,99,10,.1);color:var(--or);border:1px solid rgba(232,99,10,.25);animation:badgeBlink 2s ease infinite}
+@keyframes badgeBlink{0%,100%{opacity:1}50%{opacity:.5}}
+.b-soon{background:rgba(167,139,250,.1);color:#a78bfa;border:1px solid rgba(167,139,250,.2)}
+.b-go{background:rgba(219,169,60,.1);color:#dba93c;border:1px solid rgba(219,169,60,.2)}
+.b-end{background:rgba(34,201,122,.1);color:#22c97a;border:1px solid rgba(34,201,122,.2)}
+
+/* ══════════════════════════════
+   SCREEN 3 — RESULT: QABUL EMAS
+══════════════════════════════ */
+#screen3{display:none;padding:24px 0 40px}
+#screen3.show{display:block;animation:popIn .5s cubic-bezier(.16,1,.3,1)}
+
+.result-card-lose{background:linear-gradient(145deg,#1c1917,#292524,#44403c);border-radius:20px;padding:28px 20px;text-align:center;position:relative;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.25);margin-bottom:16px}
+.result-card-lose::before{content:'';position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.04)}
+.lose-ico{font-size:48px;display:block;margin-bottom:12px;animation:floatGently 3s ease infinite;position:relative;z-index:1}
+@keyframes floatGently{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.lose-lbl{font-size:10px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;position:relative;z-index:1}
+.lose-name{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(18px,5vw,26px);color:#fff;margin-bottom:12px;position:relative;z-index:1}
+.lose-msg{font-size:13px;color:rgba(255,255,255,.75);line-height:1.8;position:relative;z-index:1}
+.lose-msg strong{color:#fff}
+
+.lose-share{background:#fff;border:2px solid var(--brd);border-radius:16px;padding:18px;margin-bottom:14px}
+.ls-title{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;margin-bottom:6px}
+.ls-desc{font-size:12px;color:var(--mu);line-height:1.6;margin-bottom:14px}
+.ls-btn{width:100%;background:linear-gradient(135deg,#44403c,#57534e);color:#fff;border:none;border-radius:12px;padding:13px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;margin-bottom:8px}
+.ls-btn:active{transform:scale(.98)}
+.ls-copy{width:100%;background:transparent;color:#57534e;border:1.5px solid var(--brd);border-radius:12px;padding:11px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif}
+
+.try-again{width:100%;background:linear-gradient(135deg,var(--or),var(--or2));color:#fff;border:none;border-radius:12px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;margin-top:8px}
+.try-again:active{transform:scale(.98)}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#1a0a00;color:#fff;padding:10px 20px;border-radius:100px;font-size:13px;font-weight:600;z-index:9999;opacity:0;pointer-events:none;transition:all .3s;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<canvas id="confCanvas"></canvas>
+<div class="pts" id="pts"></div>
+
+<header class="hdr">
+  <div class="hdr-i">
+    <div class="logo-box"><span class="logo-txt">T1</span></div>
+    <div class="brand">Target 1.0</div>
+    <div class="hdr-pill">Natijalar</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- SCREEN 1: SEARCH -->
+<div id="screen1">
+  <div style="padding:32px 0 8px;text-align:center">
+    <div class="hero-tag" style="margin-bottom:20px"><div class="hero-dot"></div>Natijalar e'lon qilindi</div>
+    <h1>Suhbat tugadi.<br><span class="acc">Natijangizni bilib oling.</span></h1>
+    <p class="hero-desc" style="max-width:340px;margin:12px auto 28px">Ismingizni kiriting — natijangiz darhol chiqadi.</p>
+  </div>
+
+  <div class="srch-card">
+    <div class="srch-card-title">Ismingiz yoki familiyangizni kiriting</div>
+    <input class="s-in" id="nameInput" type="text" placeholder="Masalan: Xalilillo yoki Xasanboyev..." onkeydown="if(event.key==='Enter')startSearch()">
+    <button class="s-btn" onclick="startSearch()">Natijamni ko'rish →</button>
+  </div>
+
+  <div class="searching" id="searching">
+    <div class="search-dots"><div class="sd"></div><div class="sd"></div><div class="sd"></div></div>
+    <div class="search-txt" id="searchTxt">Qidirilmoqda...</div>
+  </div>
+
+  <div id="sharePrompt">
+    <div class="sp-ico" id="spIco">🎁</div>
+    <div class="sp-title">Natijangiz tayyor!</div>
+    <div class="sp-name" id="spName"></div>
+    <div class="sp-desc" id="spDesc"></div>
+    <button class="sp-btn" onclick="agreeShare()" id="spBtn">Roziman, natijamni ko'raman →</button>
+    <button class="sp-skip" onclick="agreeShare()">Yo'q, shunchaki ko'raman</button>
+  </div>
+
+  <!-- NOTICE: maqsad darsi kurs emas -->
+  <div style="background:rgba(232,99,10,.06);border:1px solid rgba(232,99,10,.18);border-radius:13px;padding:14px 16px;margin-bottom:20px;display:flex;gap:11px">
+    <div style="font-size:17px;flex-shrink:0;margin-top:1px">📌</div>
+    <div>
+      <div style="font-family:Syne,sans-serif;font-weight:700;font-size:13px;margin-bottom:3px">Bu maqsad darsi — kurs emas</div>
+      <div style="font-size:12px;color:#7a5a3a;line-height:1.6">Maqsad darsi 2 kun davom etadi. Undan o'tganlar kursga qabul qilinadi. Kurs — 2 oylik, 100% bepul, agentlikda amaliyot bilan.</div>
+    </div>
+  </div>
+
+  <!-- ROADMAP -->
+  <div style="margin-bottom:32px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+      <div style="width:18px;height:3px;background:#e8630a;border-radius:2px"></div>
+      <div style="font-family:Syne,sans-serif;font-weight:800;font-size:12px;letter-spacing:.5px;text-transform:uppercase;color:#e8630a">Keyingi qadamlar</div>
+    </div>
+    <div style="position:relative;padding-left:44px">
+      <div style="content:'';position:absolute;left:14px;top:16px;bottom:16px;width:2px;background:linear-gradient(180deg,#e8630a 0%,rgba(232,99,10,.4) 25%,rgba(167,139,250,.5) 60%,rgba(219,169,60,.6) 82%,rgba(219,169,60,.2) 100%);border-radius:2px"></div>
+
+      <!-- 9-11 aprel -->
+      <div style="position:relative;margin-bottom:8px">
+        <div style="position:absolute;left:-38px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:8px;background:#22c97a;border:1.5px solid #22c97a;color:#fff;display:flex;align-items:center;justify-content:center;font-family:Syne,sans-serif;font-weight:800;font-size:11px;z-index:2">✓</div>
+        <div style="background:rgba(34,201,122,.04);border:1.5px solid rgba(34,201,122,.25);border-radius:12px;padding:12px 14px">
+          <div style="font-family:Syne,sans-serif;font-weight:800;font-size:10px;color:#22c97a;letter-spacing:.5px;margin-bottom:2px">9 — 11 APREL</div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:2px">Suhbat tugadi</div>
+          <div style="font-size:11px;color:#7a5a3a;line-height:1.5">444 ta nomzod bilan yakkama-yakka suhbat o'tkazildi.</div>
+          <span style="display:inline-block;font-size:9px;font-weight:700;border-radius:100px;padding:2px 9px;margin-top:6px;background:rgba(34,201,122,.1);color:#22c97a;border:1px solid rgba(34,201,122,.25)">✓ TUGADI</span>
+        </div>
+      </div>
+
+      <!-- 13 aprel -->
+      <div style="position:relative;margin-bottom:8px">
+        <div style="position:absolute;left:-38px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:8px;background:#e8630a;border:1.5px solid #e8630a;color:#fff;display:flex;align-items:center;justify-content:center;font-family:Syne,sans-serif;font-weight:800;font-size:10px;z-index:2;animation:dotP 2s ease infinite">!</div>
+        <div style="background:linear-gradient(135deg,rgba(232,99,10,.05),#fff);border:1.5px solid rgba(232,99,10,.3);border-radius:12px;padding:12px 14px">
+          <div style="font-family:Syne,sans-serif;font-weight:800;font-size:10px;color:#e8630a;letter-spacing:.5px;margin-bottom:2px">13 APREL</div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:2px">Natijalar e'lon qilindi</div>
+          <div style="font-size:11px;color:#7a5a3a;line-height:1.5">444 ta ichidan 39 nafar maqsad darsiga qabul qilindi.</div>
+          <span style="display:inline-block;font-size:9px;font-weight:700;border-radius:100px;padding:2px 9px;margin-top:6px;background:rgba(232,99,10,.1);color:#e8630a;border:1px solid rgba(232,99,10,.25);animation:badgeBlink 2s ease infinite">🔴 HOZIR SHU</span>
+        </div>
+      </div>
+
+      <!-- 15 aprel -->
+      <div style="position:relative;margin-bottom:8px">
+        <div style="position:absolute;left:-38px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:8px;background:#fff;border:1.5px solid #e0ddd8;color:#9a9890;display:flex;align-items:center;justify-content:center;font-family:Syne,sans-serif;font-weight:800;font-size:11px;z-index:2">15</div>
+        <div style="background:#fff;border:1.5px solid #f0ede8;border-radius:12px;padding:12px 14px">
+          <div style="font-family:Syne,sans-serif;font-weight:800;font-size:10px;color:#9a9890;letter-spacing:.5px;margin-bottom:2px">15 APREL</div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:2px">"Maqsad" darsi — 1-kun</div>
+          <div style="font-size:11px;color:#7a5a3a;line-height:1.5">Yashashdan maqsad, hayotda oliy maqsad qo'yish, ustozga isloh qilish, target jamiyatga qanchalik foyda beradi — mavzularini o'tamiz.</div>
+          <span style="display:inline-block;font-size:9px;font-weight:700;border-radius:100px;padding:2px 9px;margin-top:6px;background:rgba(167,139,250,.1);color:#a78bfa;border:1px solid rgba(167,139,250,.2)">YAQIN</span>
+        </div>
+      </div>
+
+      <!-- 17 aprel -->
+      <div style="position:relative;margin-bottom:8px">
+        <div style="position:absolute;left:-38px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:8px;background:#fff;border:1.5px solid #e0ddd8;color:#9a9890;display:flex;align-items:center;justify-content:center;font-family:Syne,sans-serif;font-weight:800;font-size:11px;z-index:2">17</div>
+        <div style="background:#fff;border:1.5px solid #f0ede8;border-radius:12px;padding:12px 14px">
+          <div style="font-family:Syne,sans-serif;font-weight:800;font-size:10px;color:#9a9890;letter-spacing:.5px;margin-bottom:2px">17 APREL</div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:2px">"Maqsad" darsi — 2-kun</div>
+          <div style="font-size:11px;color:#7a5a3a;line-height:1.5">Targeting foundation, targetdan nima foyda — mavzularini o'tamiz.</div>
+          <span style="display:inline-block;font-size:9px;font-weight:700;border-radius:100px;padding:2px 9px;margin-top:6px;background:rgba(167,139,250,.1);color:#a78bfa;border:1px solid rgba(167,139,250,.2)">YAQIN</span>
+        </div>
+      </div>
+
+      <!-- 18 aprel -->
+      <div style="position:relative;margin-bottom:8px">
+        <div style="position:absolute;left:-38px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:8px;background:rgba(219,169,60,.12);border:1.5px solid rgba(219,169,60,.3);color:#dba93c;display:flex;align-items:center;justify-content:center;font-family:Syne,sans-serif;font-weight:800;font-size:11px;z-index:2">18</div>
+        <div style="background:rgba(219,169,60,.04);border:1.5px solid rgba(219,169,60,.2);border-radius:12px;padding:12px 14px">
+          <div style="font-family:Syne,sans-serif;font-weight:800;font-size:10px;color:#dba93c;letter-spacing:.5px;margin-bottom:2px">18 APREL</div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:2px">2 kunlik saralash</div>
+          <div style="font-size:11px;color:#7a5a3a;line-height:1.5">O'quvchi o'z maqsadini topdimi? O'zini kelajagini targetda ko'ryaptimi? So'rovnoma o'tkazamiz, yana filterlaymiz.</div>
+          <span style="display:inline-block;font-size:9px;font-weight:700;border-radius:100px;padding:2px 9px;margin-top:6px;background:rgba(219,169,60,.1);color:#dba93c;border:1px solid rgba(219,169,60,.2)">⭐ ASOSIY BOSQICH</span>
+        </div>
+      </div>
+
+      <!-- Aprel oxiri -->
+      <div style="position:relative;margin-bottom:8px">
+        <div style="position:absolute;left:-38px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:8px;background:rgba(167,139,250,.12);border:1.5px solid rgba(167,139,250,.3);color:#a78bfa;display:flex;align-items:center;justify-content:center;font-size:14px;z-index:2">🚀</div>
+        <div style="background:rgba(167,139,250,.04);border:1.5px solid rgba(167,139,250,.2);border-radius:12px;padding:12px 14px">
+          <div style="font-family:Syne,sans-serif;font-weight:800;font-size:10px;color:#a78bfa;letter-spacing:.5px;margin-bottom:2px">APREL OXIRI — 2 OY</div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:2px">Full mentorlik kursi boshlanadi</div>
+          <div style="font-size:11px;color:#7a5a3a;line-height:1.5">Qabul qilinganlar bilan 2 oylik chuqur o'rganish. Real kampaniyalar, analitika, agentlik ishi. O'sish garantiylangan.</div>
+          <span style="display:inline-block;font-size:9px;font-weight:700;border-radius:100px;padding:2px 9px;margin-top:6px;background:rgba(34,201,122,.1);color:#22c97a;border:1px solid rgba(34,201,122,.2)">✦ MAQSAD SHU</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- SCREEN 2: QABUL QILINDI -->
+<div id="screen2">
+  <div class="result-card-win">
+    <div class="win-conf" id="winConf"></div>
+    <span class="win-trophy">🏆</span>
+    <div class="win-lbl">TABRIKLAYMIZ</div>
+    <div class="win-name" id="winName"></div>
+    <div class="win-msg">
+      <strong>444 kishi</strong> ichidan faqat <strong>39 nafar</strong> o'tdi.<br>
+      Har 11 kishidan biri — <strong>siz o'sha biri bo'ldingiz.</strong>
+    </div>
+    <div class="win-pill">✓ Maqsad darsiga qabul qilindi</div>
+  </div>
+
+  <div class="win-share">
+    <div class="ws-title">📸 Ulashing!</div>
+    <div class="ws-desc">Ushbu natijani Instagram story yoki Telegram kanalingizda ulashib, boshqalarga ilhom bering.</div>
+    <button class="ws-btn" onclick="shareWin()">📤 Ulashish</button>
+    <button class="ws-copy" onclick="copyWin()">📋 Matnni nusxa olish</button>
+  </div>
+
+  <div class="rm-wrap">
+    <div class="rm-sec-lbl"><div class="rm-bar"></div><div class="rm-sec-title">Keyingi qadamlar</div></div>
+    <div class="timeline">
+      <div class="rm-item"><div class="rm-dot dot-done">✓</div><div class="rm-card c-done"><div class="rm-date">9 — 11 APREL</div><div class="rm-label">Suhbat tugadi</div><div class="rm-desc">444 ta nomzod bilan yakkama-yakka suhbat.</div><span class="rm-badge b-done">✓ TUGADI</span></div></div>
+      <div class="rm-item"><div class="rm-dot dot-now">!</div><div class="rm-card c-now"><div class="rm-date">13 APREL</div><div class="rm-label">Natijalar e'lon qilindi</div><div class="rm-desc">39 nafar maqsad darsiga qabul qilindi.</div><span class="rm-badge b-now">🔴 HOZIR SHU</span></div></div>
+      <div class="rm-item"><div class="rm-dot dot-next">15</div><div class="rm-card"><div class="rm-date" style="color:#9a9890">15 APREL</div><div class="rm-label">"Maqsad" darsi — 1-kun</div><div class="rm-desc">Birinchi dars — maqsad va yo'nalish.</div><span class="rm-badge b-soon">YAQIN</span></div></div>
+      <div class="rm-item"><div class="rm-dot dot-next">17</div><div class="rm-card"><div class="rm-date" style="color:#9a9890">17 APREL</div><div class="rm-label">"Maqsad" darsi — 2-kun</div><div class="rm-desc">Amaliyot va muhokama.</div><span class="rm-badge b-soon">YAQIN</span></div></div>
+      <div class="rm-item"><div class="rm-dot dot-go">18</div><div class="rm-card c-go"><div class="rm-date">18 APREL</div><div class="rm-label">2 kunlik yakuniy saralash</div><div class="rm-desc">Kursga qabul qilinganlar aniqlanadi.</div><span class="rm-badge b-go">⭐ ASOSIY BOSQICH</span></div></div>
+      <div class="rm-item"><div class="rm-dot dot-pu">🚀</div><div class="rm-card c-pu"><div class="rm-date">APREL OXIRI — 2 OY</div><div class="rm-label">Full mentorlik kursi</div><div class="rm-desc">2 oylik, 100% bepul. Real kampaniyalar, analitika, agentlik ishi.</div><span class="rm-badge b-end">✦ MAQSAD SHU</span></div></div>
+    </div>
+  </div>
+
+  <button class="try-again" onclick="reset()">← Boshqa nom qidirish</button>
+</div>
+
+<!-- SCREEN 3: QABUL EMAS -->
+<div id="screen3">
+  <div class="result-card-lose">
+    <span class="lose-ico">🤝</span>
+    <div class="lose-lbl">NATIJA</div>
+    <div class="lose-name" id="loseName"></div>
+    <div class="lose-msg" id="loseMsg"></div>
+  </div>
+
+  <div class="lose-share">
+    <div class="ls-title">Buni ham ulashing</div>
+    <div class="ls-desc">Harakat qilganlarga ham hurmat. Screenshotni olib, tajribangizni ulashing — bu ham jasorat.</div>
+    <button class="ls-btn" onclick="shareLose()">📤 Ulashish</button>
+    <button class="ls-copy" onclick="copyLose()">📋 Matnni nusxa olish</button>
+  </div>
+
+  <button class="try-again" onclick="reset()">← Boshqa nom qidirish</button>
+</div>
+
+</div><!-- wrap -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+const NAMES_LOW=["kamoldinova farangizbegim", "vasila sodiqova", "ziyodaxon abdujalilova", "akromjonova mohlaroyin", "moxlaroyim serobiddinova", "gʼulomjonova saidaxon", "sirojiddinova iroda", "nomonova xusnidabonu", "sharofiddinova mohinur", "adaxamjonova munira", "ogiloy shokirjonova", "sharibova marjona", "mubina sovurjonova", "moydinova qalbinur", "xoldarbekova sevinch", "dusmatova mamura", "ganijanova omina", "abdusamadova xadicha", "xalilillo xasanboyev", "nishanov umar", "kazimov abdulaziz", "akramov abdulloh", "odiljon mirzayev", "muhammad ayub", "mirzarahimov baxtibek", "abduvahobov husanboy", "asqarov izzatillo", "muhhamadkarimov azizillo", "nabiyev odilbek", "komilov muhammadaziz", "sarvarbek abduqahhorov", "ulugbek muhammadjonov", "ozodbek gʼulomov", "muhammaddiyor oybekov", "maʼmurjon joʼrayev", "abduraimov zakariyo", "hakimov saidakbar", "mirzoulugbekov shohjaxon", "ahmadaliyev farruxbek"];
+const NAMES_DISP=["Kamoldinova Farangizbegim", "Vasila Sodiqova", "Ziyodaxon Abdujalilova", "Akromjonova Mohlaroyin", "Moxlaroyim Serobiddinova", "Gʼulomjonova Saidaxon", "Sirojiddinova Iroda", "Nomonova Xusnidabonu", "Sharofiddinova Mohinur", "Adaxamjonova Munira", "Ogiloy Shokirjonova", "Sharibova Marjona", "Mubina Sovurjonova", "Moydinova Qalbinur", "Xoldarbekova Sevinch", "Dusmatova Mamura", "Ganijanova Omina", "Abdusamadova Xadicha", "Xalilillo Xasanboyev", "Nishanov Umar", "Kazimov Abdulaziz", "Akramov Abdulloh", "Odiljon Mirzayev", "Muhammad Ayub", "Mirzarahimov Baxtibek", "Abduvahobov Husanboy", "Asqarov Izzatillo", "Muhhamadkarimov Azizillo", "Nabiyev Odilbek", "Komilov Muhammadaziz", "Sarvarbek Abduqahhorov", "Ulugbek Muhammadjonov", "Ozodbek Gʼulomov", "Muhammaddiyor Oybekov", "Maʼmurjon Joʼrayev", "Abduraimov Zakariyo", "Hakimov Saidakbar", "Mirzoulugbekov Shohjaxon", "Ahmadaliyev Farruxbek"];
+
+let foundName='', isWin=false;
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+
+// Particles bg
+(function(){
+  const w=document.getElementById('pts');
+  const c=['rgba(232,99,10,.18)','rgba(245,137,13,.15)','rgba(255,169,64,.15)','rgba(255,228,181,.2)'];
+  for(let i=0;i<18;i++){
+    const el=document.createElement('div');el.className='p';
+    const s=2+Math.random()*5;
+    el.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;background:${c[i%c.length]};animation-duration:${13+Math.random()*16}s;animation-delay:-${Math.random()*18}s`;
+    w.appendChild(el);
+  }
+})();
+
+// SEARCH FLOW
+function startSearch(){
+  const q=document.getElementById('nameInput').value.trim();
+  if(!q)return;
+
+  // Hide prompt if showing
+  document.getElementById('sharePrompt').classList.remove('show');
+
+  // Show searching animation
+  const srch=document.getElementById('searching');
+  srch.classList.add('show');
+
+  const txts=['Qidirilmoqda...','Tekshirilmoqda...','Natija tayyorlanmoqda...'];
+  let ti=0;
+  document.getElementById('searchTxt').textContent=txts[0];
+  const interval=setInterval(()=>{ti++;if(ti<txts.length)document.getElementById('searchTxt').textContent=txts[ti];},600);
+
+  setTimeout(()=>{
+    clearInterval(interval);
+    srch.classList.remove('show');
+
+    const lq=q.toLowerCase();
+    const idx=NAMES_LOW.findIndex(n=>n.includes(lq)||lq.includes(n.split(' ')[0])||lq.includes(n.split(' ')[1]||''));
+    
+    if(idx>=0){
+      foundName=NAMES_DISP[idx];
+      isWin=true;
+      showSharePrompt(true);
+    } else {
+      foundName=q.split(' ')[0];
+      foundName=foundName.charAt(0).toUpperCase()+foundName.slice(1).toLowerCase();
+      isWin=false;
+      showSharePrompt(false);
+    }
+  },2000);
+}
+
+function showSharePrompt(win){
+  const sp=document.getElementById('sharePrompt');
+  document.getElementById('spName').textContent=foundName;
+  if(win){
+    document.getElementById('spIco').textContent='🎁';
+    document.getElementById('spDesc').innerHTML='Natijangiz tayyor. Ko'rish uchun — <strong>Instagram story yoki Telegram kanalingizda ulashishga rozi bo'lsangiz</strong>, natijangizni ochamiz.';
+    document.getElementById('spBtn').textContent='Roziman, natijamni ko'raman →';
+  } else {
+    document.getElementById('spIco').textContent='📩';
+    document.getElementById('spDesc').innerHTML='Natijangiz tayyor. Ko'rish uchun — <strong>screenshotni olib ulashishga rozi bo'lsangiz</strong>, natijangizni ochamiz.';
+    document.getElementById('spBtn').textContent='Roziman, natijamni ko'raman →';
+  }
+  sp.classList.add('show');
+  sp.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function agreeShare(){
+  document.getElementById('screen1').style.display='none';
+  if(isWin)showWin();else showLose();
+}
+
+// WIN
+function showWin(){
+  const s=document.getElementById('screen2');
+  s.classList.add('show');
+  document.getElementById('winName').textContent=foundName;
+  // confetti inside card
+  const w=document.getElementById('winConf');
+  const c=['rgba(255,255,255,.3)','rgba(187,247,208,.5)','rgba(134,239,172,.4)','rgba(255,228,181,.4)'];
+  for(let i=0;i<14;i++){
+    const el=document.createElement('div');el.className='wc';
+    const sz=3+Math.random()*5;
+    el.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;background:${c[i%c.length]};border-radius:${Math.random()>.5?'50%':'2px'};animation-duration:${2+Math.random()*2}s;animation-delay:-${Math.random()*3}s`;
+    w.appendChild(el);
+  }
+  // big confetti
+  launchBigConfetti();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// LOSE
+function showLose(){
+  const s=document.getElementById('screen3');
+  s.classList.add('show');
+  document.getElementById('loseName').textContent=foundName;
+  document.getElementById('loseMsg').innerHTML=
+    `Hozircha bizga to'g'ri kelmadingiz.<br><br>
+    Bu sizning qiymatizni kamaytirmaydi — shunchaki <strong>bu safar yo'llarimiz kesishmadi.</strong><br><br>
+    Keyingi imkoniyatda ko'rishguncha, harakat qilganingiz uchun rahmat. 🤝`;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// SHARE WIN
+function shareWin(){
+  const txt=`🏆 Target 1.0 — Maqsad darsiga qabul qilindim!\n\n444 ta nomzod ichidan faqat 39 nafar o'tdi.\nHar 11 kishidan biri — men o'sha biri bo'ldim. 🎉\n\n#Target10 #Andijon`;
+  doShare(txt);
+}
+function copyWin(){
+  copyText(`🏆 Target 1.0\n\n444 ta ichidan faqat 39 nafar maqsad darsiga o'tdi.\nMen o'sha 39 dan biriman! 🎉\n\n#Target10`);
+}
+
+// SHARE LOSE
+function shareLose(){
+  const txt=`Target 1.0 suhbatida qatnashdim. Bu safar o'tmadiм — lekin harakat qilganimdan afsonadaman.\n\n444 ta odam ichida bo'lish o'zi katta qadam. 💪\n\n#Target10 #Andijon`;
+  doShare(txt);
+}
+function copyLose(){
+  copyText(`Target 1.0 suhbatida qatnashdim.\nBu safar o'tmadim — lekin harakat qildim. 💪`);
+}
+
+function doShare(txt){
+  if(navigator.share)navigator.share({title:'Target 1.0',text:txt}).catch(()=>{});
+  else copyText(txt);
+}
+
+function copyText(txt){
+  navigator.clipboard.writeText(txt).then(()=>showToast('📋 Nusxa olindi!'))
+  .catch(()=>{const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();showToast('📋 Nusxa olindi!');});
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+function reset(){
+  document.getElementById('screen1').style.display='';
+  document.getElementById('screen2').classList.remove('show');
+  document.getElementById('screen3').classList.remove('show');
+  document.getElementById('sharePrompt').classList.remove('show');
+  document.getElementById('nameInput').value='';
+  document.getElementById('winConf').innerHTML='';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// BIG CONFETTI
+function launchBigConfetti(){
+  const canvas=document.getElementById('confCanvas');
+  const ctx=canvas.getContext('2d');
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
+  const pieces=[];
+  const colors=['#e8630a','#f5890d','#ffa940','#22c55e','#16a34a','#fff','#fbbf24','#a78bfa'];
+  for(let i=0;i<120;i++){
+    pieces.push({
+      x:Math.random()*canvas.width,y:-10-Math.random()*200,
+      w:4+Math.random()*8,h:4+Math.random()*8,
+      color:colors[Math.floor(Math.random()*colors.length)],
+      vx:(Math.random()-0.5)*6,vy:2+Math.random()*4,
+      rot:Math.random()*360,vrot:(Math.random()-0.5)*8,
+      op:1,isRect:Math.random()>.5
+    });
+  }
+  let frame=0;
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    pieces.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;p.vy+=0.08;p.vx*=0.99;p.rot+=p.vrot;
+      if(p.y>canvas.height)p.op-=0.05;
+      if(p.op<=0)return;
+      ctx.save();ctx.globalAlpha=p.op;ctx.fillStyle=p.color;
+      ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);
+      if(p.isRect)ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      else{ctx.beginPath();ctx.arc(0,0,p.w/2,0,Math.PI*2);ctx.fill();}
+      ctx.restore();
+    });
+    frame++;
+    if(frame<200)requestAnimationFrame(draw);
+    else{ctx.clearRect(0,0,canvas.width,canvas.height);}
+  }
+  requestAnimationFrame(draw);
+}
+</script>
+</body>
+</html>
